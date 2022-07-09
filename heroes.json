@@ -1,0 +1,29 @@
+{
+  "heroes": [
+    {
+      "id": 1,
+      "name": "Первый герой",
+      "description": "Первый герой в рейтинге!",
+      "element": "fire"
+    },
+    {
+      "id": "acbdfe16-9066-4ddc-86b9-64211ce2724b",
+      "name": "Первый герой",
+      "description": "Первый герой в рейтинге!",
+      "element": "water"
+    },
+    {
+      "id": "703e87be-65d8-4a60-b3a9-56ac8d77afdb",
+      "name": "Третии герои",
+      "description": "Первый герой в рейтинге!",
+      "element": "earth"
+    }
+  ],
+  "filters": [
+    "all",
+    "fire",
+    "water",
+    "wind",
+    "earth"
+  ]
+}
