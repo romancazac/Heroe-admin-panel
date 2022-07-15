@@ -1,33 +1,41 @@
-import {useHttp} from '../../hooks/http.hook';
+
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect'
 
-import { heroesFetching, heroesFetched, heroesFetchingError } from '../../actions';
+import {fetchHeroes} from '../../redux/slices/heroeSlice'
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
-// Задача для этого компонента:
-// При клике на "крестик" идет удаление персонажа из общего состояния
-// Усложненная задача:
-// Удаление идет и с json файла при помощи метода DELETE
 
 const HeroesList = () => {
-    const {heroes, heroesLoadingStatus} = useSelector(state => state);
+    const {status} = useSelector(state => state.heroes);
     const dispatch = useDispatch();
-    const {request} = useHttp();
+
+
+    const filteredHeroessSelector = createSelector(
+        (state) => state.filter.activeFilter,
+        (state) => state.heroes.heroes,
+        (filter,heroes) => {
+            if(filter === "all"){
+                console.log('render')
+                return heroes
+            } else {
+                return heroes.filter((item) =>  item.element === filter)
+            }
+        }
+    );
+
+    const heroesFiltred = useSelector(filteredHeroessSelector)
 
     useEffect(() => {
-        dispatch(heroesFetching());
-        request("http://localhost:3001/heroes")
-            .then(data => dispatch(heroesFetched(data)))
-            .catch(() => dispatch(heroesFetchingError()))
-
-        // eslint-disable-next-line
+        dispatch(fetchHeroes())
+        
     }, []);
 
-    if (heroesLoadingStatus === "loading") {
+    if (status === "loading") {
         return <Spinner/>;
-    } else if (heroesLoadingStatus === "error") {
+    } else if (status === "error") {
         return <h5 className="text-center mt-5">Ошибка загрузки</h5>
     }
 
@@ -41,7 +49,7 @@ const HeroesList = () => {
         })
     }
 
-    const elements = renderHeroesList(heroes);
+    const elements = renderHeroesList(heroesFiltred);
     return (
         <ul>
             {elements}

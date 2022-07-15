@@ -1,8 +1,9 @@
 import React from "react";
 
 import { useDispatch } from "react-redux";
-import { heroRemove } from "../../actions";
+
 import { useHttp } from "../../hooks/http.hook";
+import { removeHeroe } from "../../redux/slices/heroeSlice";
 
 const HeroesListItem = ({ id, name, description, element }) => {
     const dispatch = useDispatch()
@@ -29,7 +30,7 @@ const HeroesListItem = ({ id, name, description, element }) => {
 
     const removeItem = React.useCallback(() => {
     request(`http://localhost:3001/heroes/${id}`, "DELETE")
-    .then(dispatch(heroRemove(id)))
+    .then(dispatch(removeHeroe(id)))
     .catch(err => console.log(err));
     },[request]);
     

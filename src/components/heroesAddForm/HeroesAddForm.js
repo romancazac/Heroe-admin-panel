@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { heroCreate } from "../../actions";
+
 import { v4 as uuidv4 } from 'uuid';
 import { useHttp } from "../../hooks/http.hook";
-// Задача для этого компонента:
-// Реализовать создание нового героя с введенными данными. Он должен попадать
-// в общее состояние и отображаться в списке + фильтроваться
-// Уникальный идентификатор персонажа можно сгенерировать через uiid
-// Усложненная задача:
-// Персонаж создается и в файле json при помощи метода POST
-// Дополнительно:
-// Элементы <option></option> желательно сформировать на базе
-// данных из фильтров
+import { addHeroe } from "../../redux/slices/heroeSlice";
+
+
 
 const HeroesAddForm = () => {
     const dispatch = useDispatch();
+
+
     const {request} = useHttp()
     const [name, setName] = useState();
     const [text, setText] = useState();
     const [element, setElement] = useState();
+
     const createPerson = (e) => {
         e.preventDefault();
-        console.log(name, text, element)
 
         const newHero = {
             id:uuidv4(),
@@ -29,20 +25,22 @@ const HeroesAddForm = () => {
             description:text,
              element
         }
+
         request("http://localhost:3001/heroes", "POST", JSON.stringify(newHero))
         .then(
-            dispatch(heroCreate({
-                id:uuidv4(),
-                name,
-                description:text,
-                 element
-            }))
+            dispatch(addHeroe(
+                {
+                    id:uuidv4(),
+                    name,
+                    description:text,
+                    element
+                }
+            ))
         )
         
 
     }
 
-   
     
     return (
         <form className="border p-4 shadow-lg rounded">
@@ -82,6 +80,7 @@ const HeroesAddForm = () => {
                     name="element"
                     onChange={e => setElement(e.target.value)}
                     >
+
                     <option >Я владею элементом...</option>
                     <option value="fire">Огонь</option>
                     <option value="water">Вода</option>
