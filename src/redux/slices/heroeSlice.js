@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { heroRemove } from '../../actions';
+
 import { useHttp } from "../../hooks/http.hook";
 // First, create the thunk
 export const fetchHeroes = createAsyncThunk(
